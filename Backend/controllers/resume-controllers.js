@@ -44,9 +44,15 @@ const createResume = async (req, res, next) => {
     });
 
     try{
-        await newResume.save();
+        const sess = await mongoose.startSession();
+        sess.startTransaction();
+
+        await newResume.save({session:sess});
         userFound.resumeId  = newResume._id;
-        await userFound.save();    
+        userFound.latestSection = "personalInfo";
+        await userFound.save({session:sess});    
+
+        sess.commitTransaction();
     }catch(err){
         console.log(err);
         return next(new HttpError('Something went wrong!',500));
@@ -98,7 +104,7 @@ const addPersonalInfo = async (req,res,next) => {
         resumeFound.personalInfo = newPersonalInfo;
         await resumeFound.save({session:sess});
 
-        resumeFound.userId.latestSection = "personalInfo";
+        resumeFound.userId.latestSection = "experience";
         await resumeFound.userId.save({session:sess});
 
         sess.commitTransaction();
@@ -154,7 +160,7 @@ const addExperience = async (req,res,next) => {
         resumeFound.experiences.push(newExperience);
         await resumeFound.save({session:sess});
 
-        resumeFound.userId.latestSection = "experience";
+        resumeFound.userId.latestSection = "project";
         await resumeFound.userId.save({session:sess});
 
         sess.commitTransaction();
@@ -206,7 +212,7 @@ const addProject = async (req,res,next) => {
         resumeFound.projects.push(newProject);
         await resumeFound.save({session:sess});
 
-        resumeFound.userId.latestSection = "project";
+        resumeFound.userId.latestSection = "education";
         await resumeFound.userId.save({session:sess});
 
         sess.commitTransaction();
@@ -260,7 +266,7 @@ const addEducation = async (req,res,next) => {
         resumeFound.education.push(newEducation);
         await resumeFound.save({session:sess});
 
-        resumeFound.userId.latestSection = "education";
+        resumeFound.userId.latestSection = "skills";
         await resumeFound.userId.save({session:sess});
 
         sess.commitTransaction();
@@ -303,7 +309,7 @@ const addSkill = async (req,res,next) => {
         resumeFound.skills = skills;
         await resumeFound.save({session:sess});
 
-        resumeFound.userId.latestSection = "skills";
+        resumeFound.userId.latestSection = "summary";
         await resumeFound.userId.save({session:sess});
 
         sess.commitTransaction();

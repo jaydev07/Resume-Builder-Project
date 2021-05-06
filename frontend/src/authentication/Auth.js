@@ -1,4 +1,5 @@
-import React,{useState,useReducer} from 'react';
+import React,{useState, useContext} from 'react';
+import {useHistory} from 'react-router-dom';
 
 import "./Auth.css";
 import {
@@ -8,8 +9,16 @@ import {
     } from "../shared/util/validators";
 import Input from "../shared/components/Input";
 import {useForm} from "../shared/hooks/useForm";
+import Backdrop from "../shared/UIElements/Backdrop";
+import ErrorModal from "../shared/UIElements/ErrorModal";
+import LoadingSpinner from "../shared/UIElements/LoadingSpinner";
+import {AuthContext} from "../shared/context/auth-context";
 
 const Auth = () => {
+
+    const auth = useContext(AuthContext);
+
+    const history = useHistory();
 
     const [formState, inputHandler, setFormData] = useForm(
         {
@@ -24,6 +33,9 @@ const Auth = () => {
         },
         false
     );
+
+    const [error,setError] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
     const [isLoginMode , setIsLoginMode] = useState(true);
 
@@ -48,17 +60,87 @@ const Auth = () => {
             },
             formState.inputs.email.isValid && formState.inputs.password.isValid)
         }
-
         setIsLoginMode(prev => !prev)
     }
 
-    const submitHandler = (event) => {
+    const submitHandler = async (event) => {
         event.preventDefault();
-        console.log(formState.inputs);
+        if(!isLoginMode){
+            setIsLoading(true);
+            try{
+                const response = await fetch("http://localhost:5000/api/user/signup",{
+                    method:'POST',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name:formState.inputs.name.value,
+                        email:formState.inputs.email.value,
+                        password:formState.inputs.password.value
+                    })
+                });
+                const responseData = await response.json();
+
+                if(responseData.message){
+                    throw Error(responseData.message);
+                }
+
+                auth.login(responseData.user.id);
+            }catch(err){
+                console.log(err);
+                setError(err.message || 'Something went wrong!');
+            }
+            setIsLoading(false);
+        }else{
+            setIsLoading(true);
+            try{
+                const response = await fetch("http://localhost:5000/api/user/login",{
+                    method:'POST',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email:formState.inputs.email.value,
+                        password:formState.inputs.password.value
+                    })
+                });
+                const responseData = await response.json();
+
+                if(responseData.message){
+                    throw Error(responseData.message);
+                }
+
+                auth.login(responseData.user.id);
+
+                if(responseData.user.latestSection){
+                    history.push(`/${responseData.user.latestSection}`);
+                }
+                
+            }catch(err){
+                console.log(err);
+                setError(err.message || 'Something went wrong!');
+            }
+            setIsLoading(false);
+        }
+    }
+
+    // To handle error
+    const errorHandler = () => {
+        setError(null);
     }
 
     return(
         <React.Fragment>
+
+            { error && (
+                <React.Fragment>
+                    <Backdrop onClick={errorHandler} />
+                    <ErrorModal heading="Error Occured!" error={error} />
+                </React.Fragment>
+            )}
+
+            { isLoading && <LoadingSpinner asOverlay />}
+
             <div className="auth-form">
                 <form onSubmit={submitHandler}>
                     { !isLoginMode && <Input 

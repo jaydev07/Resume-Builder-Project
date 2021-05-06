@@ -1,7 +1,14 @@
 const User = require("../models/user-model");
 const HttpError = require("../util/http-error");
+const { validationResult } = require("express-validator");
 
 const signup = async (req,res,next) => {
+
+    const error = validationResult(req);
+    if(!error.isEmpty()){
+        console.log(error);
+        return next(new HttpError('Invalid input.Please Check!',422));
+    }
     
     const {name,email,password} = req.body;
     
@@ -36,6 +43,13 @@ const signup = async (req,res,next) => {
 }
 
 const login = async (req,res,next) => {
+
+    const error = validationResult(req);
+    if(!error.isEmpty()){
+        console.log(error);
+        return next(new HttpError('Invalid input.Please Check!',422));
+    }
+    
     const {email,password} = req.body;
 
     let userFound;
