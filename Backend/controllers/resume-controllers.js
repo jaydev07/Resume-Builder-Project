@@ -160,7 +160,7 @@ const addExperience = async (req,res,next) => {
         resumeFound.experiences.push(newExperience);
         await resumeFound.save({session:sess});
 
-        resumeFound.userId.latestSection = "project";
+        resumeFound.userId.latestSection = "allExperiences";
         await resumeFound.userId.save({session:sess});
 
         sess.commitTransaction();
@@ -490,6 +490,60 @@ const getSummary = async (req,res,next) => {
     }
 
     res.json({summary:resumeFound.summary});
+}
+
+const getExperienceById = async (req,res,next) => {
+    const experienceId = req.params.experienceId;
+
+    let experienceFound;
+    try{
+        experienceFound = await Experience.findById(experienceId);
+    }catch(err){
+        console.log(err);
+        return next(new HttpError('Something went wrong!',500));
+    }
+
+    if(!experienceFound){
+        return next(new HttpError('Experience not found!',500));
+    }
+
+    res.json({experience:experienceFound.toObject({getters:true})});
+}
+
+const getProjectById = async (req,res,next) => {
+    const projectId = req.params.projectId;
+
+    let projectFound;
+    try{
+        projectFound = await Project.findById(projectId);
+    }catch(err){
+        console.log(err);
+        return next(new HttpError('Something went wrong!',500));
+    }
+
+    if(!projectFound){
+        return next(new HttpError('Project not found!',500));
+    }
+
+    res.json({project:projectFound.toObject({getters:true})});
+}
+
+const getEducationById = async (req,res,next) => {
+    const educationId = req.params.educationId;
+
+    let educationFound;
+    try{
+        educationFound = await Education.findById(educationId);
+    }catch(err){
+        console.log(err);
+        return next(new HttpError('Something went wrong!',500));
+    }
+
+    if(!educationFound){
+        return next(new HttpError('Education not found!',500));
+    }
+
+    res.json({education:educationFound.toObject({getters:true})});
 }
 
 ////////////////////////////////////////////////////////////// PATCH Controllers ///////////////////////////////////////////////////////////
@@ -896,3 +950,6 @@ exports.deleteExperience = deleteExperience;
 exports.deleteProject = deleteProject;
 exports.deleteEducation = deleteEducation;
 exports.deleteSkill = deleteSkill;
+exports.getExperienceById = getExperienceById;
+exports.getProjectById = getProjectById;
+exports.getEducationById = getEducationById;

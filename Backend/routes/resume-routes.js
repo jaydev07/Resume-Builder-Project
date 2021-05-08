@@ -18,6 +18,12 @@ router.get("/summary/:resumeId", resumeControllers.getSummary);
 
 router.get("/:resumeId", resumeControllers.getResume);
 
+router.get("/getexperience/:experienceId", resumeControllers.getExperienceById);
+
+router.get("/getproject/:projectId", resumeControllers.getProjectById);
+
+router.get("/geteducation/:educationId", resumeControllers.getEducationById);
+
 router.post("/",
             [
                 check('userId').not().isEmpty()

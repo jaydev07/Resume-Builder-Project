@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 import "./ExperienceTips.css";
 
@@ -11,6 +12,12 @@ const ExperienceTips = () => {
                 <p>When describing your job duties, avoid using personal pronouns like “I, ” “me”, "my" etc.</p>
                 <p>Showcase your skills by using strong action verbs (“led,” “organized”, "coordinated"). Use figures to add value when possible. For example: "decreased production costs by 20%".</p>
                 <p>Use bullet points to list your job responsibilities in short, direct sentences.</p>
+
+                <button>
+                    <Link to="/new/experience">
+                        Next
+                    </Link>
+                </button>
             </div>
         </React.Fragment>
     )

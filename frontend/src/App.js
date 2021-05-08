@@ -12,6 +12,10 @@ import Auth from "./authentication/Auth";
 import HomePage from "./home/HomePage";
 import PersonalInfo from "./personalInfo/PersonalInfo";
 import ExperienceTips from "./experience/ExperienceTips";
+import Experience from "./experience/Experience";
+import ShowAllExperiences from "./experience/ShowAllExperiences";
+import UpdateExperience from "./experience/UpdateExperience";
+import ProjectTips from "./project/ProjectTips";
 
 function App() {
 
@@ -48,9 +52,25 @@ function App() {
           <PersonalInfo />
         </Route>
 
-        <Router path="/experience" exact>
+        <Route path="/experience" exact>
           <ExperienceTips />
-        </Router>
+        </Route>
+
+        <Route path="/new/experience" exact>
+          <Experience />
+        </Route>
+
+        <Route path="/experience/:experienceId" exact>
+          <UpdateExperience />
+        </Route>
+
+        <Route path="/allExperiences" exact>
+          <ShowAllExperiences />
+        </Route>
+
+        <Route path="/projectTips" exact>
+          <ProjectTips />
+        </Route>
 
         <Redirect to="/" />        
       </Switch>

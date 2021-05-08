@@ -112,6 +112,10 @@ const Auth = () => {
 
                 auth.login(responseData.user.id);
 
+                if(responseData.user.resumeId){
+                    auth.setResumeId(responseData.user.resumeId);
+                }
+
                 if(responseData.user.latestSection){
                     history.push(`/${responseData.user.latestSection}`);
                 }

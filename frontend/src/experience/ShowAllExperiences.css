@@ -1,0 +1,9 @@
+.experience{
+    display: center;
+    border: 1px solid black;
+    border-radius:10px;
+    background-color: rgb(228, 222, 222);
+    margin:1% auto;
+    padding:0.3% 1%;
+    width:75%;
+}
