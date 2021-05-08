@@ -168,7 +168,7 @@ const UpdateExperience = () => {
             { !isLoading && experience && (
                 <div className="myform">
 
-                    <h1>You are editing you {experience.jobTitle} post of {experience.company} company</h1>
+                    <h3>You are editing you {experience.jobTitle} post of {experience.company} company</h3>
                                     
                     <form>
                         <Input

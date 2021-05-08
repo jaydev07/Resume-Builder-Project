@@ -15,6 +15,7 @@ const ShowAllExperiences = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
+    const [change, setChange] = useState(false);
 
     useEffect(() => {
         const sendRequest = async () => {
@@ -36,11 +37,31 @@ const ShowAllExperiences = () => {
         }
         
         sendRequest();
-    },[]);
+    },[change]);
 
     // To handle error
     const errorHandler = () => {
         setError(null);
+    }
+
+    const deleteHandler = async (experienceId) => {
+        try{
+            setIsLoading(true);
+            const response = await fetch(`http://localhost:5000/api/resume/experience/${experienceId}`,{
+                method:'DELETE'
+            });
+
+            const responseData = await response.json();
+
+            if(responseData.message){
+                throw new Error(responseData.message)
+            }
+            setChange(prev => !prev);
+        }catch(err){
+            console.log(err);
+            setError(err);
+        }
+        setIsLoading(false);
     }
 
     return(
@@ -71,7 +92,7 @@ const ShowAllExperiences = () => {
                                             UPDATE
                                         </Link>
                                     </button>
-                                    <button>DELETE</button>
+                                    <button onClick={() => {deleteHandler(exp.id)}}>DELETE</button>
                                 </div>
                             )
                         })
