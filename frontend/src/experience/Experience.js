@@ -175,7 +175,7 @@ const Experience = () => {
                         onInput={inputHandler}
                     />
                 </form>
-                <button onClick={submitHandler}>Save & Next</button>
+                <button onClick={submitHandler} disabled={!formState.isValid}>Save & Next</button>
             </div>
         </React.Fragment>
     )

@@ -16,6 +16,10 @@ import Experience from "./experience/Experience";
 import ShowAllExperiences from "./experience/ShowAllExperiences";
 import UpdateExperience from "./experience/UpdateExperience";
 import ProjectTips from "./project/ProjectTips";
+import EducationTips from "./education/EducationTips";
+import Education from "./education/Education";
+import ShowAllEducation from "./education/ShowAllEducation";
+import UpdateEducation from "./education/UpdateEducation";
 
 function App() {
 
@@ -66,6 +70,22 @@ function App() {
 
         <Route path="/allExperiences" exact>
           <ShowAllExperiences />
+        </Route>
+
+        <Route path="/educationTips" exact>
+          <EducationTips />
+        </Route>
+
+        <Route path="/new/education" exact>
+          <Education />
+        </Route>
+
+        <Route path="/allEducations" exact>
+          <ShowAllEducation />
+        </Route>
+
+        <Route path="/education/:educationId" exact>
+          <UpdateEducation />
         </Route>
 
         <Route path="/projectTips" exact>

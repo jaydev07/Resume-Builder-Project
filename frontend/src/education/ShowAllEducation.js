@@ -1,17 +1,16 @@
 import React,{useEffect,useState,useContext} from 'react';
 import {Link} from 'react-router-dom';
 
-import "./ShowAllExperiences.css";
 import {AuthContext} from "../shared/context/auth-context";
 import Backdrop from "../shared/UIElements/Backdrop";
 import ErrorModal from "../shared/UIElements/ErrorModal";
 import LoadingSpinner from "../shared/UIElements/LoadingSpinner";
 
-const ShowAllExperiences = () => {
+const ShowAllEducations = () => {
 
     const auth = useContext(AuthContext);
 
-    const [experiences, setExperiences] = useState();
+    const [educations, setEducations] = useState();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
@@ -21,14 +20,14 @@ const ShowAllExperiences = () => {
         const sendRequest = async () => {
             setIsLoading(true);
             try{
-                const response = await fetch(`http://localhost:5000/api/resume/experience/${auth.resumeId}`);
+                const response = await fetch(`http://localhost:5000/api/resume/education/${auth.resumeId}`);
                 const responseData = await response.json();
 
                 if(responseData.message){
                     throw Error(responseData.message);
                 }
 
-                setExperiences(responseData.experiences);
+                setEducations(responseData.education);
             }catch(err){
                 console.log(err);
                 setError(err);
@@ -44,10 +43,10 @@ const ShowAllExperiences = () => {
         setError(null);
     }
 
-    const deleteHandler = async (experienceId) => {
+    const deleteHandler = async (educationId) => {
         try{
             setIsLoading(true);
-            const response = await fetch(`http://localhost:5000/api/resume/experience/${experienceId}`,{
+            const response = await fetch(`http://localhost:5000/api/resume/education/${educationId}`,{
                 method:'DELETE'
             });
 
@@ -75,37 +74,36 @@ const ShowAllExperiences = () => {
             )}
             { isLoading && <LoadingSpinner asOverlay />}
 
-            <h1>EXPERIENCE</h1>
-            <p>List your work experience, from the most recent to the oldest.</p>
+            <h1>EDUCATION</h1>
+            <p>Add information about your educational background.</p>
             
-            { !isLoading && experiences && (
+            { !isLoading && educations && (
                 <React.Fragment>
                     {
-                        experiences.map(exp => {
+                        educations.map(edu => {
                             return(
-                                <div className="experience" key={exp.id}>
-                                    <h5>{exp.company}</h5>
-                                    <p>{exp.state}, {exp.city}</p>
-                                    <h6>{exp.jobTitle}, {exp.startDate}-{exp.endDate}</h6>
+                                <div className="experience" key={edu.id}>
+                                    <h5>{edu.institute}</h5>
+                                    <h6>{edu.degree}, {edu.graduationDate}</h6>
                                     <button>
-                                        <Link to={`/experience/${exp.id}`}>
+                                        <Link to={`/education/${edu.id}`}>
                                             UPDATE
                                         </Link>
                                     </button>
-                                    <button onClick={() => {deleteHandler(exp.id)}}>DELETE</button>
+                                    <button onClick={() => {deleteHandler(edu.id)}}>DELETE</button>
                                 </div>
                             )
                         })
                     }
 
                     <button>
-                        <Link to="/new/experience" >
-                            ADD ANOTHER POSITION
+                        <Link to="/new/education" >
+                            ADD ANOTHER DEGREE
                         </Link>
                     </button>
 
                     <button>
-                        <Link to="/educationTips" >
+                        <Link to="" >
                             Next
                         </Link>
                     </button>
@@ -118,4 +116,4 @@ const ShowAllExperiences = () => {
     )
 }
 
-export default ShowAllExperiences;
+export default ShowAllEducations;

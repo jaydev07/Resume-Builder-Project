@@ -1,12 +1,9 @@
-import React,{useState,useContext} from 'react';
+import React,{useContext,useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
-import  "./PersonalInfo.css";
 import Input from "../shared/components/Input";
 import {useForm} from "../shared/hooks/useForm";
 import {
-    VALIDATOR_EMAIL,
-    VALIDATOR_MINLENGTH,
     VALIDATOR_REQUIRE
 } from "../shared/util/validators";
 import {AuthContext} from "../shared/context/auth-context";
@@ -14,8 +11,7 @@ import Backdrop from "../shared/UIElements/Backdrop";
 import ErrorModal from "../shared/UIElements/ErrorModal";
 import LoadingSpinner from "../shared/UIElements/LoadingSpinner";
 
-const PersonalInfo = () => {
-
+const Education = () => {
     const auth = useContext(AuthContext);
 
     const history = useHistory();
@@ -25,11 +21,7 @@ const PersonalInfo = () => {
 
     const [formState, inputHandler, setFormData] = useForm(
         {
-            fullName:{
-                value:'',
-                isValid:false
-            },
-            address:{
+            institute:{
                 value:'',
                 isValid:false
             },
@@ -37,37 +29,37 @@ const PersonalInfo = () => {
                 value:'',
                 isValid:false
             },
-            country:{
+            state:{
                 value:'',
                 isValid:false
             },
-            email:{
+            degree:{
                 value:'',
                 isValid:false
             },
-            phone:{
+            graduationDate:{
                 value:'',
                 isValid:false
-            },
+            }
         },
         false
     );
 
     const submitHandler = async () => {
+        console.log(auth.resumeId);
         try{
             setIsLoading(true);
-            const response = await fetch(`http://localhost:5000/api/resume/personalInfo/${auth.resumeId}`,{
+            const response = await fetch(`http://localhost:5000/api/resume/education/${auth.resumeId}`,{
                 method:'POST',
                 headers:{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    fullName:formState.inputs.fullName.value,
-                    address:formState.inputs.address.value,
+                    institute:formState.inputs.institute.value,
                     city:formState.inputs.city.value,
-                    country:formState.inputs.country.value,
-                    email:formState.inputs.email.value,
-                    phone:formState.inputs.phone.value,
+                    state:formState.inputs.state.value,
+                    degree:formState.inputs.degree.value,
+                    graduationDate:formState.inputs.graduationDate.value
                 })
             });
 
@@ -77,7 +69,7 @@ const PersonalInfo = () => {
                 throw new Error(responseData.message);
             }
 
-            history.push('/experience');
+            history.push('/allEducations');
         }catch(err){
             console.log(err);
             setError(err.message || 'Something went wrong!');
@@ -102,26 +94,17 @@ const PersonalInfo = () => {
             { isLoading && <LoadingSpinner asOverlay />}
 
             <div className="myform">
-                <h1>COMPLETE YOUR RESUME HEADING</h1>
-                <p>Employers will use this information to contact you.</p>
+                <h1>EDUCATION</h1>
+                <p>Add information about your educational background.</p>
             
                 <form>
                     <Input
-                        id="fullName" 
+                        id="institute" 
                         element="input"
                         type="text"
-                        label="Full Name"
+                        label="Institute"
                         validators={[VALIDATOR_REQUIRE()]}
-                        errorText="Please enter a valid name"
-                        onInput={inputHandler}
-                    />
-                    <Input
-                        id="address" 
-                        element="input"
-                        type="text"
-                        label="Address"
-                        validators={[VALIDATOR_MINLENGTH(10)]}
-                        errorText="Please enter a valid address"
+                        errorText="Please enter a valid institute name"
                         onInput={inputHandler}
                     />
                     <Input
@@ -134,30 +117,31 @@ const PersonalInfo = () => {
                         onInput={inputHandler}
                     />
                     <Input
-                        id="country" 
+                        id="state" 
                         element="input"
                         type="text"
-                        label="Country"
+                        label="State"
                         validators={[VALIDATOR_REQUIRE()]}
-                        errorText="Please enter a valid country name"
+                        errorText="Please enter a valid state name"
                         onInput={inputHandler}
                     />
                     <Input
-                        id="email" 
+                        id="degree" 
                         element="input"
                         type="text"
-                        label="Email"
-                        validators={[VALIDATOR_EMAIL()]}
-                        errorText="Please enter a valid email"
+                        label="degree"
+                        validators={[VALIDATOR_REQUIRE()]}
+                        errorText="Please enter a valid degree."
                         onInput={inputHandler}
                     />
                     <Input
-                        id="phone" 
+                        id="graduationDate" 
                         element="input"
                         type="text"
-                        label="Phone No."
-                        validators={[VALIDATOR_MINLENGTH(10)]}
-                        errorText="Please enter a valid phone no. of atleats 10 numbers."
+                        label="Graduation Date"
+                        placeholder="03/05/2020"
+                        validators={[VALIDATOR_REQUIRE()]}
+                        errorText="Please enter a valid date."
                         onInput={inputHandler}
                     />
                 </form>
@@ -167,4 +151,4 @@ const PersonalInfo = () => {
     )
 }
 
-export default PersonalInfo;
+export default Education;

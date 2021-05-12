@@ -12,9 +12,9 @@ import Backdrop from "../shared/UIElements/Backdrop";
 import ErrorModal from "../shared/UIElements/ErrorModal";
 import LoadingSpinner from "../shared/UIElements/LoadingSpinner";
 
-const UpdateExperience = () => {
+const UpdateEducation = () => {
 
-    const experienceId = useParams().experienceId;
+    const educationId = useParams().educationId;
 
     const auth = useContext(AuthContext);
 
@@ -22,15 +22,11 @@ const UpdateExperience = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
-    const [experience, setExperience] = useState();
+    const [education, setEducation] = useState();
 
     const [formState, inputHandler, setFormData] = useForm(
         {
-            company:{
-                value:'',
-                isValid:false
-            },
-            jobTitle:{
+            institute:{
                 value:'',
                 isValid:false
             },
@@ -42,15 +38,11 @@ const UpdateExperience = () => {
                 value:'',
                 isValid:false
             },
-            startDate:{
+            degree:{
                 value:'',
                 isValid:false
             },
-            endDate:{
-                value:'',
-                isValid:false
-            },
-            jobDescription:{
+            graduationDate:{
                 value:'',
                 isValid:false
             }
@@ -62,19 +54,17 @@ const UpdateExperience = () => {
         console.log(auth.resumeId);
         try{
             setIsLoading(true);
-            const response = await fetch(`http://localhost:5000/api/resume/updateExperience/${experienceId}`,{
+            const response = await fetch(`http://localhost:5000/api/resume/updateEducation/${educationId}`,{
                 method:'PATCH',
                 headers:{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    company:formState.inputs.company.value,
-                    jobTitle:formState.inputs.jobTitle.value,
+                    institute:formState.inputs.institute.value,
                     city:formState.inputs.city.value,
                     state:formState.inputs.state.value,
-                    startDate:formState.inputs.startDate.value,
-                    endDate:formState.inputs.endDate.value,
-                    jobDescription:formState.inputs.jobDescription.value,
+                    degree:formState.inputs.degree.value,
+                    graduationDate:formState.inputs.graduationDate.value
                 })
             });
 
@@ -84,7 +74,7 @@ const UpdateExperience = () => {
                 throw new Error(responseData.message);
             }
 
-            history.push('/allExperiences');
+            history.push('/allEducations');
         }catch(err){
             console.log(err);
             setError(err.message || 'Something went wrong!');
@@ -103,7 +93,7 @@ const UpdateExperience = () => {
         const sendRequest = async () => {
             setIsLoading(true);
             try{
-                const response = await fetch(`http://localhost:5000/api/resume/getexperience/${experienceId}`);
+                const response = await fetch(`http://localhost:5000/api/resume/geteducation/${educationId}`);
                 const responseData = await response.json();
     
                 if(responseData.message){
@@ -112,39 +102,31 @@ const UpdateExperience = () => {
                 
                 setFormData(
                     {
-                        company:{
-                            value:responseData.experience.company,
-                            isValid:true
-                        },
-                        jobTitle:{
-                            value:responseData.experience.jobTitle,
+                        institute:{
+                            value:responseData.education.institute,
                             isValid:true
                         },
                         city:{
-                            value:responseData.experience.city,
+                            value:responseData.education.city,
                             isValid:true
                         },
                         state:{
-                            value:responseData.experience.state,
+                            value:responseData.education.state,
                             isValid:true
                         },
-                        startDate:{
-                            value:responseData.experience.startDate,
+                        degree:{
+                            value:responseData.education.degree,
                             isValid:true
                         },
-                        endDate:{
-                            value:responseData.experience.endDate,
-                            isValid:true
-                        },
-                        jobDescription:{
-                            value:responseData.experience.jobDescription,
+                        graduationDate:{
+                            value:responseData.education.graduationDate,
                             isValid:true
                         }
                     },
                     true
                 );
 
-                setExperience(responseData.experience);
+                setEducation(responseData.education);
             }catch(err){
                 console.log(err);
                 setError(err);
@@ -165,32 +147,21 @@ const UpdateExperience = () => {
             )}
             { isLoading && <LoadingSpinner asOverlay />}
 
-            { !isLoading && experience && (
+            { !isLoading && education && (
                 <div className="myform">
 
-                    <h3>You are editing you {experience.jobTitle} post of {experience.company} company</h3>
+                    <h3>You are editing you {education.degree} degree of {education.institute} institute</h3>
                                     
                     <form>
                         <Input
-                            id="company" 
+                            id="institute" 
                             element="input"
                             type="text"
-                            label="Company"
+                            label="Institute"
                             validators={[VALIDATOR_REQUIRE()]}
-                            errorText="Please enter a valid company name"
+                            errorText="Please enter a valid institute name"
                             onInput={inputHandler}
-                            value={experience.company}
-                            isValid={true}
-                        />
-                        <Input
-                            id="jobTitle" 
-                            element="input"
-                            type="text"
-                            label="Job Title"
-                            validators={[VALIDATOR_REQUIRE()]}
-                            errorText="Please enter a valid job title."
-                            onInput={inputHandler}
-                            value={experience.jobTitle}
+                            value={education.institute}
                             isValid={true}
                         />
                         <Input
@@ -201,7 +172,7 @@ const UpdateExperience = () => {
                             validators={[VALIDATOR_REQUIRE()]}
                             errorText="Please enter a valid city name"
                             onInput={inputHandler}
-                            value={experience.city}
+                            value={education.city}
                             isValid={true}
                         />
                         <Input
@@ -212,42 +183,29 @@ const UpdateExperience = () => {
                             validators={[VALIDATOR_REQUIRE()]}
                             errorText="Please enter a valid state name"
                             onInput={inputHandler}
-                            value={experience.state}
+                            value={education.state}
                             isValid={true}
                         />
                         <Input
-                            id="startDate" 
+                            id="degree" 
                             element="input"
                             type="text"
-                            label="Start Date"
-                            placeholder="Eg: 02/10/2020"
-                            validators={[VALIDATOR_MINLENGTH(8)]}
-                            errorText="Please enter a valid date"
+                            label="degree"
+                            validators={[VALIDATOR_REQUIRE()]}
+                            errorText="Please enter a valid degree."
                             onInput={inputHandler}
-                            value={experience.startDate}
+                            value={education.degree}
                             isValid={true}
                         />
                         <Input
-                            id="endDate" 
+                            id="graduationDate" 
                             element="input"
                             type="text"
-                            label="End Date"
-                            placeholder="Eg: Currently working"
-                            validators={[VALIDATOR_MINLENGTH(8)]}
+                            label="Graduation Date"
+                            validators={[VALIDATOR_REQUIRE()]}
                             errorText="Please enter a valid date."
                             onInput={inputHandler}
-                            value={experience.endDate}
-                            isValid={true}
-                        />
-                        <Input
-                            id="jobDescription" 
-                            element="textarea"
-                            type="text"
-                            label="Job Description"
-                            validators={[VALIDATOR_MINLENGTH(10)]}
-                            errorText="Please enter the job description of atleast 10 characters."
-                            onInput={inputHandler}
-                            value={experience.jobDescription}
+                            value={education.graduationDate}
                             isValid={true}
                         />
                     </form>
@@ -259,4 +217,4 @@ const UpdateExperience = () => {
     )
 }
 
-export default UpdateExperience;
+export default UpdateEducation;

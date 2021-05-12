@@ -266,7 +266,7 @@ const addEducation = async (req,res,next) => {
         resumeFound.education.push(newEducation);
         await resumeFound.save({session:sess});
 
-        resumeFound.userId.latestSection = "skills";
+        resumeFound.userId.latestSection = "allEducations";
         await resumeFound.userId.save({session:sess});
 
         sess.commitTransaction();
