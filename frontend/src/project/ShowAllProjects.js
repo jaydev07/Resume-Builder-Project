@@ -6,11 +6,11 @@ import Backdrop from "../shared/UIElements/Backdrop";
 import ErrorModal from "../shared/UIElements/ErrorModal";
 import LoadingSpinner from "../shared/UIElements/LoadingSpinner";
 
-const ShowAllEducations = () => {
+const ShowAllProjects = () => {
 
     const auth = useContext(AuthContext);
 
-    const [educations, setEducations] = useState();
+    const [projects, setProjects] = useState();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
@@ -20,14 +20,14 @@ const ShowAllEducations = () => {
         const sendRequest = async () => {
             setIsLoading(true);
             try{
-                const response = await fetch(`http://localhost:5000/api/resume/education/${auth.resumeId}`);
+                const response = await fetch(`http://localhost:5000/api/resume/project/${auth.resumeId}`);
                 const responseData = await response.json();
 
                 if(responseData.message){
                     throw Error(responseData.message);
                 }
 
-                setEducations(responseData.education);
+                setProjects(responseData.projects);
             }catch(err){
                 console.log(err);
                 setError(err);
@@ -43,10 +43,10 @@ const ShowAllEducations = () => {
         setError(null);
     }
 
-    const deleteHandler = async (educationId) => {
+    const deleteHandler = async (projectId) => {
         try{
             setIsLoading(true);
-            const response = await fetch(`http://localhost:5000/api/resume/education/${educationId}`,{
+            const response = await fetch(`http://localhost:5000/api/resume/project/${projectId}`,{
                 method:'DELETE'
             });
 
@@ -74,46 +74,43 @@ const ShowAllEducations = () => {
             )}
             { isLoading && <LoadingSpinner asOverlay />}
 
-            <h1>EDUCATION</h1>
-            <p>Add information about your educational background.</p>
+            <h1>PROJECTS</h1>
+            <p>Add information about your projects.</p>
             
-            { !isLoading && educations && (
+            { !isLoading && projects && (
                 <React.Fragment>
                     {
-                        educations.map(edu => {
+                        projects.map(pro => {
                             return(
-                                <div className="experience" key={edu.id}>
-                                    <h5>{edu.institute}</h5>
-                                    <h6>{edu.degree}, {edu.graduationDate}</h6>
+                                <div className="experience" key={pro.id}>
+                                    <h5>{pro.name}</h5>
+                                    <h6>{pro.description}</h6>
                                     <button>
-                                        <Link to={`/education/${edu.id}`}>
+                                        <Link to={`/project/${pro.id}`}>
                                             UPDATE
                                         </Link>
                                     </button>
-                                    <button onClick={() => {deleteHandler(edu.id)}}>DELETE</button>
+                                    <button onClick={() => {deleteHandler(pro.id)}}>DELETE</button>
                                 </div>
                             )
                         })
                     }
 
                     <button>
-                        <Link to="/new/education" >
-                            ADD ANOTHER DEGREE
+                        <Link to="/new/project" >
+                            ADD ANOTHER PROJECT
                         </Link>
                     </button>
 
                     <button>
-                        <Link to="/projectTips" >
+                        <Link to="" >
                             Next
                         </Link>
                     </button>
                 </React.Fragment>
             )}
-            
-            
-
         </React.Fragment>
     )
 }
 
-export default ShowAllEducations;
+export default ShowAllProjects;

@@ -212,7 +212,7 @@ const addProject = async (req,res,next) => {
         resumeFound.projects.push(newProject);
         await resumeFound.save({session:sess});
 
-        resumeFound.userId.latestSection = "education";
+        resumeFound.userId.latestSection = "allProjects";
         await resumeFound.userId.save({session:sess});
 
         sess.commitTransaction();
