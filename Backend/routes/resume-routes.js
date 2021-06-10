@@ -3,33 +3,45 @@ const router = express.Router();
 const { check } = require("express-validator");
 
 const resumeControllers = require("../controllers/resume-controllers");
-
+ 
+// Use to get personal information of user providing in resume.
 router.get("/personalInfo/:resumeId", resumeControllers.getPersonalInfo);
 
+// Use to get experience of user providing in resume.
 router.get("/experience/:resumeId", resumeControllers.getExperiences);
 
+// Use to get projrct of user providing in resume.
 router.get("/project/:resumeId", resumeControllers.getProjects);
 
+// Use to get education of user providing in resume.
 router.get("/education/:resumeId", resumeControllers.getEducation);
 
+// Use to get skills of user providing in resume.
 router.get("/skill/:resumeId", resumeControllers.getSkills);
 
+// Use to get summary of user providing in resume.
 router.get("/summary/:resumeId", resumeControllers.getSummary);
 
+// Use to get resumeId of user providing in resume.
 router.get("/:resumeId", resumeControllers.getResume);
 
+// Use to get a particular Experience by experienceId.
 router.get("/getexperience/:experienceId", resumeControllers.getExperienceById);
 
+// Use to get a particular project by projectId.
 router.get("/getproject/:projectId", resumeControllers.getProjectById);
 
+// Use to get a particular education by educationId.
 router.get("/geteducation/:educationId", resumeControllers.getEducationById);
 
+// To create a resume
 router.post("/",
             [
                 check('userId').not().isEmpty()
             ]
             ,resumeControllers.createResume);
 
+// To create a personal Information            
 router.post("/personalInfo/:resumeId",
             [
                 check('fullName').not().isEmpty(),
@@ -41,6 +53,7 @@ router.post("/personalInfo/:resumeId",
             ]
             , resumeControllers.addPersonalInfo);
 
+// To create an experience
 router.post("/experience/:resumeId",
             [
                 check('company').not().isEmpty(),
@@ -53,6 +66,7 @@ router.post("/experience/:resumeId",
             ]
             , resumeControllers.addExperience);
 
+// To create a project
 router.post("/project/:resumeId",
             [
                 check('name').not().isEmpty(),
@@ -61,6 +75,7 @@ router.post("/project/:resumeId",
             ]
             , resumeControllers.addProject);
 
+// To create an education
 router.post("/education/:resumeId",
             [
                 check('institute').not().isEmpty(),
@@ -71,18 +86,21 @@ router.post("/education/:resumeId",
             ]
             , resumeControllers.addEducation);
 
+//to create skils
 router.post("/skill/:resumeId",
             [
                 check('skills').not().isEmpty(),
             ]
             , resumeControllers.addSkill);
 
+// To create a summary
 router.post("/summary/:resumeId",
             [
                 check('summary').not().isEmpty(),
             ]
             , resumeControllers.addSummary);
 
+// To update a personal Information
 router.patch("/updatePersonalInfo/:personalInfoId",
             [
                 check('fullName').not().isEmpty(),
@@ -94,6 +112,7 @@ router.patch("/updatePersonalInfo/:personalInfoId",
             ]
             , resumeControllers.updatePersonalInfo);
 
+// To update an experience            
 router.patch("/updateExperience/:experienceId",
             [
                 check('company').not().isEmpty(),
@@ -106,6 +125,7 @@ router.patch("/updateExperience/:experienceId",
             ]
             , resumeControllers.updateExperience);
 
+// To update a project
 router.patch("/updateProject/:projectId",
             [
                 check('name').not().isEmpty(),
@@ -114,6 +134,7 @@ router.patch("/updateProject/:projectId",
             ]
             , resumeControllers.updateProject);
 
+// To update an education
 router.patch("/updateEducation/:educationId",
             [
                 check('institute').not().isEmpty(),
@@ -124,24 +145,31 @@ router.patch("/updateEducation/:educationId",
             ]
             , resumeControllers.updateEducation);
 
+// To update a skill
 router.patch("/updateSkill/:resumeId",
             [
                 check('skills').not().isEmpty(),
             ]
             , resumeControllers.updateSkills);
 
+// To update a summary
 router.patch("/updateSummary/:resumeId",
             [
                 check('summary').not().isEmpty(),
             ]
             , resumeControllers.updateSummary);
 
+// To delete an experience
 router.delete("/experience/:experienceId", resumeControllers.deleteExperience);
 
+// To delete a project
 router.delete("/project/:projectId", resumeControllers.deleteProject);
 
+// To delete an education
 router.delete("/education/:educationId", resumeControllers.deleteEducation);
 
+// To delete a skill
 router.delete("/skill/:resumeId/:skillId", resumeControllers.deleteSkill);
+
 
 module.exports = router;
